@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards</title>
+<style>
+  body {
+    background-color: blue;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  .flashcard {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 20px auto;
+    width: 300px;
+    height: 200px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+</style>
+</head>
+<body>
+<div class="flashcard" id="flashcard">
+  <div id="prompt"></div>
+  <div id="answer" style="display: none;"></div>
+</div>
+<button onclick="showAnswer()">Show Answer</button>
+<button onclick="nextFlashcard()">Next Flashcard</button>
+<button onclick="resetFlashcards()">Reset</button>
+
+<h2>Create Your Own Flashcards</h2>
+<form id="flashcardForm" onsubmit="addFlashcard(event)">
+  <label for="numFlashcards">Number of Flashcards:</label><br>
+  <input type="number" id="numFlashcards" name="numFlashcards" min="1" value="1" required><br><br>
+  <div id="flashcardInputs">
+    <div>
+      <label for="question1">Question:</label><br>
+      <input type="text" id="question1" name="question1" required><br>
+      <label for="answer1">Answer:</label><br>
+      <input type="text" id="answerInput1" name="answer1" required><br><br>
+    </div>
+  </div>
+  <button type="submit">Add Flashcards</button>
+</form>
+
+<script>
+let flashcards = [];
+let currentCardIndex = 0;
+
+function showAnswer() {
+  document.getElementById("answer").style.display = "block";
+}
+
+function nextFlashcard() {
+  currentCardIndex = (currentCardIndex + 1) % flashcards.length;
+  document.getElementById("prompt").textContent = flashcards[currentCardIndex].prompt;
+  document.getElementById("answer").textContent = flashcards[currentCardIndex].answer;
+  document.getElementById("answer").style.display = "none";
+}
+
+function resetFlashcards() {
+  currentCardIndex = 0;
+  if (flashcards.length > 0) {
+    document.getElementById("prompt").textContent = flashcards[currentCardIndex].prompt;
+    document.getElementById("answer").textContent = flashcards[currentCardIndex].answer;
+  }
+}
+
+function addFlashcard(event) {
+  event.preventDefault();
+  const numFlashcards = parseInt(document.getElementById("numFlashcards").value);
+  for (let i = 1; i <= numFlashcards; i++) {
+    const question = document.getElementById("question" + i).value;
+    const answer = document.getElementById("answerInput" + i).value;
+    flashcards.push({ prompt: question, answer: answer });
+  }
+  document.getElementById("flashcardForm").reset();
+  resetFlashcards();
+}
+
+// Initialize with the first flashcard
+resetFlashcards();
+</script>
+</body>
+</html>
